@@ -13,7 +13,7 @@ ArraySliceInfo::ArraySliceInfo(const Segments segments) : _size_computed(false)
 
 void ArraySliceInfo::init(const Segments segments)
 {
-    _segments = segments; // TODO copy to prevent
+    _segments = segments;
     _dimension = segments.size();
 }
 
