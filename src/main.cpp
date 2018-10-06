@@ -2,43 +2,36 @@
 
 #include <iostream>
 
-#include "AxisSegment.hpp"
 #include "ArraySliceInfo.hpp"
 
 int main(int argc, char *argv[])
 {
     std::cout<<"Starting tests\n";
 
-    ArraySliceInfo cube2(
-        Segments{
-            AxisSegment(0, 1),
-            AxisSegment(0, 1),
-            AxisSegment(0, 1)
-        }
-    );
+    ArraySliceInfo cube2({
+        {0, 1},
+        {0, 1},
+        {0, 1}
+    });
 
     assert(cube2.size() == 8);
     assert(cube2.dimension() == 3);
     assert(cube2.is_empty() == false);
 
-    ArraySliceInfo cube1(
-        Segments{
-            AxisSegment(0, 0),
-            AxisSegment(0, 0),
-            AxisSegment(0, 0)
-        }
-    );
+    ArraySliceInfo cube1({
+        {0, 0},
+        {0, 0},
+        {0, 0}
+    });
 
     assert(cube1.size() == 1);
     assert(cube1.dimension() == 3);
 
-    ArraySliceInfo cube2shift(
-        Segments{
-            AxisSegment(1, 2),
-            AxisSegment(1, 2),
-            AxisSegment(1, 2)
-        }
-    );
+    ArraySliceInfo cube2shift({
+        {1, 2},
+        {1, 2},
+        {1, 2}
+    });
 
     auto intersection = cube2.intersection(cube2shift);
 
