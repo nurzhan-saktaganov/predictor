@@ -2,7 +2,7 @@
 
 #include "AxisSegment.hpp"
 
-AxisSegment::AxisSegment() {}
+AxisSegment::AxisSegment() : AxisSegment(0, 0) {}
 
 AxisSegment::AxisSegment(uint64_t from, uint64_t to)
 {
