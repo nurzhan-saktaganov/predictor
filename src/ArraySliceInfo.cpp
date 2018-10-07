@@ -1,5 +1,3 @@
-#include <algorithm>
-
 #include "ArraySliceInfo.hpp"
 
 ArraySliceInfo::ArraySliceInfo() : _dimension(0), _size(0), _size_computed(true) {}
@@ -32,7 +30,7 @@ uint64_t ArraySliceInfo::size() const
     if (!_size_computed) {
         _size = 1;
         for (const AxisSegment &segment : _segments) {
-            _size *= segment.to() - segment.from() + 1;
+            _size *= segment.size();
         }
         _size_computed = true;
     }
@@ -60,14 +58,11 @@ ArraySliceInfo ArraySliceInfo::intersection(const ArraySliceInfo& with) const
         AxisSegment a = this->_segments[i];
         AxisSegment b = with._segments[i];
 
-        uint64_t from = std::max(a.from(), b.from());
-        uint64_t to = std::min(a.to(), b.to());
+        segments[i] = a.intersection(b);
 
-        if (from > to) {
+        if (segments[i].is_empty()) {
             return ArraySliceInfo::empty(this->dimension());
         }
-
-        segments[i].init(from, to);
     }
 
     return ArraySliceInfo(segments);
