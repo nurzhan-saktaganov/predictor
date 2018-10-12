@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
     assert(cube1.size() == 1);
     assert(cube1.dimension() == 3);
+    assert(cube1.is_empty() == false);
 
     ArraySliceInfo cube2shift({
         {1, 2},
