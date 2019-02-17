@@ -41,6 +41,7 @@ namespace dvmpredictor {
 
 		Dispositions _distribute(Shape shape, DRule r) const;
 
+		Segment _aligned_on_segment(Segment s, AFormat f) const;
 		Dispositions _align_on(Shape shape, Dispositions d, ARule r) const;
 
 		uint64_t _nodes_count() const;

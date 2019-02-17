@@ -185,6 +185,7 @@ namespace dvmpredictor {
 		return dispositions;
 	}
 
+	// align a shape with disposition d using rule r.
 	Dispositions  PGrid::_align_on(Shape shape, Dispositions d, ARule r) const
 	{
 		Dispositions ret;
@@ -213,14 +214,61 @@ namespace dvmpredictor {
 			}
 		}
 
-		for (auto &disposition: d) {
-			Segments segments;
 
+
+		for (auto &disposition: d) {
 			for (auto &rule: r) {
-				// TODO  a = k1 - b;
+				// TODO: WTF??
 			}
 		}
 
 		return ret;
+	}
+
+	Segment _aligned_on_segment(Segment s, AFormat f) //const
+	{
+		/*
+		let's assume we have segment [k1, k2] and an another segment [i1, i2]
+		aligned with former one by rule: a*I + b, I - index variable.
+		i1, i2 are unknown, we have to find their values.
+		i1 => a*i1 + b => k'1, k1 <= k'1 <= k2. Similar for i2.
+
+		k'1 is the least k: (k - b) % a == 0 and k1 <= k.
+		Assume k'1 = k1 + d1, where d1 = (a - r1) % a, r1 = (k1 - b) % a.
+
+		Similar for k'2 is the greatest k: (k - b) % a == 0 and k <= k2.
+		Assume k'2 = k2 - d2. d2 = r2, r2 = (k2 - b) % a.
+		*/
+		int64_t from, to;
+		int a = f.a(), b = f.b();
+
+		assert(!s.is_empty());
+		assert(f.defined());
+
+		// calculate i1
+		{
+			int64_t k1 = s.from();
+			int64_t r1 = (k1 - b) % a;
+			int64_t d1 = (a - r1) % a;
+			int64_t k = k1 + d1;
+
+			int64_t i1 = (k - b) / a;
+
+			from = i1;
+		}
+
+		// calculate i2
+		{
+			int64_t k2 = s.to();
+			int64_t r2 = (k2 - b) % a;
+			int64_t d2 = r2;
+			int64_t k = k2 - d2;
+
+			int64_t i2 = (k - b) / a;
+
+			to = i2;
+		}
+
+		return Segment(from, to);
 	}
 }
