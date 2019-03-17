@@ -2,12 +2,14 @@
 
 namespace dvmpredictor {
 	class AFormat {
+	// AFormat represents parameters of the next align formulae: a*I + b
 	public:
 		AFormat();
 		AFormat(uint32_t dim, int a, int b);
 
 		bool defined() const;
 
+		// The corresponding dimension's number
 		uint32_t dimension() const;
 		int a() const;
 		int b() const;

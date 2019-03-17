@@ -188,7 +188,9 @@ namespace dvmpredictor {
 	// align a shape with disposition d using rule r.
 	Dispositions  PGrid::_align_on(Shape shape, Dispositions d, ARule r) const
 	{
-		Dispositions ret;
+		// TODO в конце для каждого измерения проверить целостность
+		Dispositions ret(d.size());
+		ARule reordered;
 
 		// check shape and arule are conform
 		assert(shape.size() == r.size());
@@ -198,6 +200,8 @@ namespace dvmpredictor {
 			auto slice = d[0].second;
 			auto base_dimension = slice.dimension();
 
+			reordered.resize(base_dimension);
+
 			std::vector<bool> reserved(base_dimension); 
 			std::fill(reserved.begin(), reserved.end(), false);
 
@@ -206,26 +210,35 @@ namespace dvmpredictor {
 
 				uint32_t dim = rule.dimension();
 
-				assert(dim <= base_dimension);
+				assert(dim < base_dimension);
 
 				assert(! reserved[dim]);
 
 				reserved[dim] = true;
+				reordered[dim] = rule;
 			}
 		}
 
+		for (uint32_t i = 0; i < d.size(); ++i) {
+			Disposition disp = d[i];
+			Slice slice(shape.size());
 
+			// If some dimension of slice is not distributed/aligned,
+			// we take the whole range of this dimension from original slice (shape).
+			// Otherwise only the aligned part.
 
-		for (auto &disposition: d) {
-			for (auto &rule: r) {
-				// TODO: WTF??
+			if (!f.defined()) {
+				// TODO
 			}
+
+			ret[i].first = disp.first;
+			ret[i].second = slice;
 		}
 
 		return ret;
 	}
 
-	Segment _aligned_on_segment(Segment s, AFormat f) //const
+	Segment PGrid::_aligned_on_segment(Segment s, AFormat f) const
 	{
 		/*
 		let's assume we have segment [k1, k2] and an another segment [i1, i2]
